@@ -21,20 +21,21 @@ app.use(cors());
 // Rota para fazer login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body)
+  // console.log(req.body)
   if (!email || !password) {
     return res.status(400).json({ message: 'Preencha todos os campos.' });
   }
 
   try {
     // Busca o usuário pelo email
-    const [rows, fields] = await pool.query('SELECT * FROM users WHERE email ='+ email + ' AND password='+ password);
+    const [rows, fields] = await pool.query('SELECT * FROM users WHERE email = "'+ email + '"');
+    // console.log(rows)
     if (rows.length === 0) {
       return res.status(401).json({ message: 'Email ou senha incorretos.' });
     }
 
     // Compara a senha com o hash armazenado no banco de dados
-    const match = await bcrypt.compare(password, rows[0].password);
+    const match = await bcrypt.compare(password, rows[0].senha);
     if (!match) {
       return res.status(401).json({ message: 'Email ou senha incorretos.' });
     }
@@ -67,7 +68,7 @@ app.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     // Insere o novo usuário no banco de dados
-    await pool.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hash]);
+    await pool.query('INSERT INTO users (email, senha) VALUES (?, ?)', [email, hash]);
 
     return res.json({ message: 'Usuário registrado com sucesso.' });
   } catch (error) {
@@ -89,11 +90,25 @@ const io = socketIo(server, {
   },
 });
 
+
+
+let messages = []
+
 io.on('connection', (socket) => {
   // console.log(`Usuário conectado: ${socket.id}`);
 
+  socket.emit('previousMessages', messages);
+
   socket.on('chat message', (user, msg) => {
-    console.log(`user: ${user}, message: ${msg}`);
+
+
+    let obj = {
+      "usuario": user,
+      "mesagem": msg
+    }
+
+    messages.push(obj);
+    // console.log(`user: ${user}, message: ${msg}`);
     io.emit('chat message', user, msg);
   });
 

@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise');
 
+console.log("passou no DB")
+
 const pool = mysql.createPool({
   host: 'containers-us-west-101.railway.app',
   user: 'root',
