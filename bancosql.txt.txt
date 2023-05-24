@@ -1,0 +1,62 @@
+USE BeautyDB;
+
+CREATE DATABASE BeautyDB;
+
+CREATE TABLE users (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL,
+    pass VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (email, pass) VALUES ("igor@gmail.com", "123456");
+
+SELECT * FROM users;
+
+create database teste;
+
+use teste;
+
+CREATE TABLE users (
+id INT AUTO_INCREMENT, PRIMARY KEY(id),
+email VARCHAR(255) NOT NULL,
+passwrd VARCHAR(255) NOT NULL
+
+);
+
+CREATE TABLE products (
+id INT AUTO_INCREMENT, PRIMARY KEY(id),
+pname VARCHAR(255) NOT NULL,
+descr VARCHAR(255) NOT NULL,
+category_id integer,
+dt_validade Date,
+constraint fkcategory_id foreign key(category_id) references category(id)
+);
+
+
+DROP TABLE products;
+
+CREATE TABLE category (
+id INT AUTO_INCREMENT, PRIMARY KEY(id),
+cname VARCHAR(255) NOT NULL
+
+);
+
+CREATE TABLE pictures (
+id INT AUTO_INCREMENT, PRIMARY KEY(id),
+nprod VARCHAR(255) NOT NULL,
+picdesc VARCHAR(255) NOT NULL
+
+);
+
+SET @count = 0;
+UPDATE products SET products.id = @count:= @count + 1;
+
+INSERT INTO users (email, passwrd) VALUES ("teste@senac.com","123456");
+
+INSERT INTO products (pname, descr, category_id, dt_validade) VALUES ("batom","natura", 1, "2023-04-05");
+
+INSERT INTO category (cname) VALUES ("rosto");
+
+INSERT INTO pictures (nprod, picdesc) VALUES ("image","foto da base");
+
+SELECT * FROM products;
